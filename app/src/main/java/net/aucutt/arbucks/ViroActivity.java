@@ -17,9 +17,6 @@
 package net.aucutt.arbucks;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -112,7 +109,7 @@ public class ViroActivity extends Activity {
                 public void onRotate(int i, Node node, float rotation, RotateState rotateState) {
                     if(rotateState == RotateState.ROTATE_START) {
                         rotateStart = object3D.getRotationEulerRealtime().y;
-                        Log.d(TAG2, "rotatate start "  + rotateStart   +  "  thing " +  rotation);
+                        Log.d(TAG2, "rotate start "  + rotateStart   +  "  thing " +  rotation);
                     }
                     float totalRotationY = rotateStart + rotation;
                     object3D.setRotation(new Vector(0, totalRotationY, 0));
@@ -124,10 +121,8 @@ public class ViroActivity extends Activity {
                 @Override
                 public void onClick(int i, Node node, Vector vector) {
                     Log.d(TAG2,"destroy ");
-                  //  object3D.removeFromParentNode();
-                   // object3D.dispose();
-
-                    //mScene.getRootNode().removeFromParentNode(object3D);
+                    object3D.removeFromParentNode();
+                    object3D.dispose();
                 }
 
                 @Override
@@ -201,29 +196,6 @@ public class ViroActivity extends Activity {
         Boolean random = r.nextBoolean();
         Log.d(TAG2, " random " + random );
         add3DDraggableObject(fileName, cameraPos.add( new Vector(0, 0, random ? 1 : -1)));
-     //   add3DDraggableObject(fileName, cameraPos);
-//        viewARView.performARHitTestWithRay(viewARView.getLastCameraForwardRealtime(), new ARHitTestListener() {
-//            @Override
-//            public void onHitTestFinished(ARHitTestResult[] arHitTestResults) {
-//                if (arHitTestResults != null && arHitTestResults.length > 0) {
-//                    for (int i = 0; i < arHitTestResults.length; i++) {
-//                        ARHitTestResult result = arHitTestResults[i];
-//                        float distance = result.getPosition().distance(cameraPos);
-//                        Log.d(TAG2, "thing " + result );
-//                        //add3DDraggableObject(fileName, result.getPosition());
-//                        //return;
-//                        if (distance > MIN_DISTANCE && distance < MAX_DISTANCE) {
-//                            // If we found a plane or feature point further than 0.2m and less 10m away,
-//                            // then choose it!
-//                            add3DDraggableObject(fileName, result.getPosition());
-//                            return;
-//                        }
-//                    }
-//                }
-//                Toast.makeText(ViroActivity.this, "Unable to find suitable point or plane to place object!",
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 
     /**
@@ -235,31 +207,6 @@ public class ViroActivity extends Activity {
         draggable3DObject.addModelToPosition(position);
     }
 
-    /**
-     * Dialog menu displaying the virtual objects we can place in the real world.
-     */
-    public void showPopup(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        CharSequence itemsList[] = {"Coffee mug", "Flowers", "Smile Emoji"};
-        builder.setTitle("Choose an object")
-                .setItems(itemsList, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                placeObject("file:///android_asset/object_coffee_mug.vrx");
-                                break;
-                            case 1:
-                                placeObject("file:///android_asset/object_flowers.vrx");
-                                break;
-                            case 2:
-                                placeObject("file:///android_asset/facestar.vrx");
-                                break;
-                        }
-                    }
-                });
-        Dialog d = builder.create();
-        d.show();
-    }
 
     public void showStar(View v) {
         placeObject("file:///android_asset/facestar.vrx");
